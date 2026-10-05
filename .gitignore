@@ -1,0 +1,16 @@
+# Python environment created by the setup cell in step1_base_network.ipynb
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Cache of the demand Excel (re-created automatically by helpers.load_demand_profiles)
+data/demand_profiles.csv
+
+# Solver / oemof by-products
+*.lp
+*.log
+*.oemof
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,12 @@
+# Python 3.11 - 3.14 (the course uses 3.12). Installed automatically by the setup cell in step1_base_network.ipynb.
+# Versions pinned to the combination the notebooks were tested with.
+dhnx==0.0.4
+oemof.solph==0.6.5
+pyomo==6.10.1
+highspy==1.15.1          # HiGHS solver (used when CBC is not installed)
+pandas==3.0.6
+numpy==2.5.3
+networkx==3.7
+matplotlib==3.11.2
+openpyxl==3.1.5          # reads the demand-profile Excel file
+ipykernel==7.4.0         # lets Jupyter / VS Code use this environment as a kernel

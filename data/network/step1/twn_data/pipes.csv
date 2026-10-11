@@ -1,0 +1,20 @@
+id,from_node,to_node,length,street,from_label,to_label
+0,forks-0,forks-1,207.0,Dalagatan,F0,F1
+1,forks-1,forks-2,128.2,Dalagatan,F1,F2
+2,forks-2,forks-3,157.1,Dalagatan,F2,F3
+3,forks-3,forks-4,172.0,Dalagatan,F3,F4
+4,forks-4,forks-5,175.4,Sabbatsberg campus road,F4,F5
+5,forks-6,forks-7,190.3,Västmannagatan,F6,F7
+6,forks-7,forks-8,176.6,Västmannagatan,F7,F8
+7,forks-8,forks-9,113.8,Västmannagatan,F8,F9
+8,forks-0,forks-6,105.0,Vanadisvägen,F0,F6
+9,forks-1,forks-7,104.5,Frejgatan,F1,F7
+10,forks-2,forks-8,127.1,Karlbergsvägen,F2,F8
+11,forks-3,forks-9,105.0,Odengatan,F3,F9
+12,producers-0,forks-0,23.7,producer connection,P0,F0
+13,producers-1,forks-5,45.5,producer connection,P1,F5
+14,forks-2,consumers-0,32.6,service pipe,F2,C0
+15,forks-9,consumers-1,57.3,service pipe,F9,C1
+16,forks-5,consumers-2,119.4,service pipe,F5,C2
+17,forks-3,consumers-3,60.1,service pipe,F3,C3
+18,forks-7,consumers-4,46.7,service pipe,F7,C4

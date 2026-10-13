@@ -31,6 +31,8 @@ MJ2505_DH_project/
 ├── data/                                  INPUTS
 │   ├── Demand profiles_heating.xlsx         given: 50 hourly heat-demand profiles
 │   ├── input_data_DH1.csv                   PLACEHOLDER prices (oemof tutorial, 2019), replace
+│   ├── pipe_types.csv                       pipe table DN-25 ... DN-60 (Didrik), DHNx format
+│   ├── producers_technology.csv             technology data of P0-P4 (Elisabeth), for Step 3
 │   └── stepN/                               written by notebook N, read by later steps
 └── results/                               OUTPUTS (tables + figures for the report)
     └── stepN/
@@ -64,8 +66,9 @@ Excel demand ──► Step 1 ──► data/step1/ (twn_data, invest_data) ─�
 | 0 | Project-wide assumptions: country, latitude, supply/return temperature, interest rate, pipe lifetime. Change them **only here** | all |
 | 1 | Paths, solver choice (CBC → HiGHS fallback) | all |
 | 2 | `epc()`, `LCOH()`, copied unchanged from the OEMOF tutorial `helpers.py` | all |
-| 3 | `load_demand_profiles()`: reads the Excel once and caches it as CSV | 1, 2, 3 |
-| 4 | `pipe_capacity_kW()`, `write_dhnx_input()` (writes the tutorial folder structure), `plot_network()` | 1, 2 |
+| 0 | also `DEMAND_SCALE` (0.4, see below) and `SIMULTANEITY` | all |
+| 3 | `load_demand_profiles()`: reads the Excel once, caches it as CSV, fixes the two data gaps. `demand_scaled()`: the demand every step must use | 1–3 |
+| 4 | Vasastan network (real coordinates around Odenplan): consumers, producers, junctions, candidate streets. `write_step_inputs()` (tutorial folder structure), `run_dhnx()` (adds the two rules below), `pipe_results()`, `producer_supply()`, `summary()`, `export_network_losses()`, `plot_dh_network()` | 1, 2 |
 | 5 | `build_and_solve_heat_system()`: the oemof model of the 5 producers, written in tutorial style. Steps 3, 4 and 5 all call this function, so they solve the **same** model. Also `summarize_units()`, `heat_dispatch()`, `plot_dispatch()` | 3, 4, 5 |
 
 ## Placeholders to replace before the report
@@ -73,9 +76,8 @@ Excel demand ──► Step 1 ──► data/step1/ (twn_data, invest_data) ─�
 All of these are marked 🔧 or ✏️ in the notebooks. They exist so the full chain runs from day one.
 
 - Country, temperatures, interest rate, lifetimes (`helpers.py` section 0)
-- Choice of the 5 + 5 demand profiles and the network layout and coordinates (Step 1 §2 and §4, Step 2 §1 and §4)
-- Pipe costs, heat losses and velocity limits per DN (Step 1 §3, Step 2 §2)
-- Producer technologies, capacities and marginal costs in DHNx (Step 1 §4, Step 2 §3)
+- ~~Demand profiles, network layout, pipe data, producer sites~~ **done in Steps 1–2** (Vasastan network, Didrik's pipe table)
+- **Step 3 technology table:** still the scaffold placeholders (biomass, gas boiler, heat pump, electric boiler, solar). Replace with the five Step 2 producers and Elisabeth's data in `data/producers_technology.csv`: P0 heat pump (station air), P1 biomass boiler, P2 electric boiler, P3 biogas boiler, P4 heat pump (supermarket)
 - **Price time series** in `data/input_data_DH1.csv`: these are the tutorial's 2019 prices, so replace them with prices for your country (Step 3 §2)
 - Solar profile clearness indices, or replace the profile with PVGIS data (Step 3 §3)
 - Technology data and sources, preferably the Danish Energy Agency catalogue (Step 3 §5)
@@ -83,9 +85,15 @@ All of these are marked 🔧 or ✏️ in the notebooks. They exist so the full 
 
 ## Modelling notes (useful for the report and the oral exam)
 
-- **DHNx design hour:** DHNx sizes the network for the peak hour (`heat_demand='scalar'`, every consumer at `P_heat_max`). Pipe investment is annualised with `epc()`. Producer operating cost is entered as €/MWh × full-load hours so that it is comparable with the annual pipe cost.
+- **Demand scale 0.4:** all Excel profiles are used as building-type shapes and multiplied by `DEMAND_SCALE` = 0.4, in every step. The assignment fixes the pipe range to DN-25 ... DN-60, and Didrik's capacities (checked against ΔT = 40 K and about 100 Pa/m) give at most 208.9 kW for DN-50. Unscaled, the five Step 1 consumers need 873 kW from two producers that each connect through one pipe, which is infeasible (tested). Alternative if the group prefers real-size buildings: about 2× the pipe capacities (ΔT 50 K, 250 Pa/m) plus simultaneity 0.72/0.77. That also solves, but it changes Didrik's table.
+- **DHNx design hour:** DHNx sizes the network for the peak hour (`heat_demand='scalar'`, every consumer at its scaled `P_heat_max`, simultaneity 1). Pipe cost is the overnight investment in €/m. Producers are free inside DHNx, so annualising with `epc()` would scale every pipe cost by the same factor and give the same design.
+- **Two rules added to DHNx** (`helpers.py` section 4, explained in Step 1 §4):
+  - **One pipe type per street:** DHNx 0.0.4 otherwise stacks two sizes in parallel, and its own result code then crashes.
+  - **One connected network:** without it, free heat makes DHNx build one island per producer. Steps 3–5 assume all producers serve the total demand. The cost premium is +1.6 % in Step 1 and +28 % in Step 2. Both notebooks show the island version for comparison.
+- **Producer supply in DHNx is not dispatch:** it is decided by pipe costs only. In Step 2 the electric boiler delivers about 0 kW at the design hour, and the biogas and biomass boilers are capped by their connection pipes. The economic split comes from oemof in Step 3.
 - **Losses:** losses are flow-independent (`l_factor_fix`, W/m). The DHNx loss in kW is therefore the same in every hour, so it is added as a constant hourly profile in Step 4.
 - **Hourly index:** oemof uses `infer_last_interval=True`, so all 8760 hours are modelled. The tutorial's `False` silently drops the last hour.
+- **CBC status read (fixed):** Steps 3–4 read the solver status as a plain dict, which only works with HiGHS. They now handle both solvers. The optional fixed-capacity run in Step 4 §4.2 now reports "infeasible" instead of crashing "run all": the Step 3 plant is sized exactly to the peak, so it cannot also cover the losses.
 - **"Both directions" warnings:** with HiGHS, DHNx may log `Investment status ... is 1 for both directions`. This is solver round-off (binary values such as 1 + 1e-14), not a real double build.
 
 ## Git tips

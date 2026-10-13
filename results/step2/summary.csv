@@ -1,0 +1,14 @@
+,value
+consumers,10.0
+producers,5.0
+pipe types available,5.0
+design demand (sum of peaks) [kW],795.8708612868244
+heat losses at design hour [kW],23.068983
+losses / demand [%],2.8985836926734967
+annual heat loss [MWh/yr],202.08429107999999
+annual demand [MWh/yr],2868.3142214242666
+pipes built,27.0
+built length [m],2635.3
+candidate length [m],3808.2
+pipe investment [EUR],747940.14
+objective value [EUR],747940.14

@@ -1,0 +1,6 @@
+producer,technology,supply_kW,share
+P0,Heat pump (station exhaust air),286.83903,0.35025690277987964
+P1,Biomass (wood pellet) boiler,208.9,0.25508616101064374
+P2,Electric boiler,0.292572,0.0003572573877415321
+P3,Biogas boiler,53.521466,0.06535464477549877
+P4,Heat pump (supermarket refrigeration heat),269.38591,0.32894503404623643

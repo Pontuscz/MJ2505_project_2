@@ -1,0 +1,20 @@
+id,from_node,to_node,length,hp_type,capacity,direction,costs,losses,street,from_key,to_key,design_flow_kW,built,utilisation,kind
+0,forks-0,forks-1,207.0,DN-50,208.9,1,67026.6,1.90026,Dalagatan,F0,F1,195.24986,True,0.943753566299665,street main
+1,forks-1,forks-2,128.2,DN-50,208.9,1,41511.159999999996,1.176876,Dalagatan,F1,F2,172.61954,True,0.8319598659645763,street main
+2,forks-2,forks-3,157.1,DN-50,208.9,1,50868.98,1.442178,Dalagatan,F2,F3,67.678089,True,0.33087729535662996,street main
+3,forks-3,forks-4,172.0,DN-30,53.6,-1,45425.200000000004,1.42588,Dalagatan,F3,F4,50.720054,True,0.9728719029850745,street main
+4,forks-4,forks-5,175.4,DN-30,53.6,-1,46323.14000000001,1.454066,Sabbatsberg campus road,F4,F5,52.145934,True,0.9999999999999999,street main
+5,forks-6,forks-7,190.3,,0.0,0,0.0,0.0,Västmannagatan,F6,F7,0.0,False,0.0,street main
+6,forks-7,forks-8,176.6,,0.0,0,0.0,0.0,Västmannagatan,F7,F8,0.0,False,0.0,street main
+7,forks-8,forks-9,113.8,,0.0,0,0.0,0.0,Västmannagatan,F8,F9,0.0,False,0.0,street main
+8,forks-0,forks-6,105.0,,0.0,0,0.0,0.0,Vanadisvägen,F0,F6,0.0,False,0.0,street main
+9,forks-1,forks-7,104.5,DN-30,53.6,1,27598.45,0.8663050000000001,Frejgatan,F1,F7,20.587143,True,0.4002508955223881,street main
+10,forks-2,forks-8,127.1,,0.0,0,0.0,0.0,Karlbergsvägen,F2,F8,0.0,False,0.0,street main
+11,forks-3,forks-9,105.0,DN-50,208.9,1,33999.0,0.9639000000000001,Odengatan,F3,F9,73.366014,True,0.3558157683101963,street main
+12,producers-0,forks-0,23.7,DN-50,208.9,1,7674.06,0.217566,producer connection,P0,F0,197.15012,True,0.9447950502632838,producer connection
+13,producers-1,forks-5,45.5,DN-50,208.9,1,14732.9,0.41769,producer connection,P1,F5,164.03609,True,0.787236859741503,producer connection
+14,forks-2,consumers-0,32.6,DN-50,207.9,1,10555.880000000001,0.29926800000000003,service pipe,F2,C0,103.2,True,0.4978319769119769,service
+15,forks-9,consumers-1,57.3,DN-50,207.9,1,18553.739999999998,0.526014,service pipe,F9,C1,72.84,True,0.3528908802308803,service
+16,forks-5,consumers-2,119.4,DN-50,207.9,1,38661.72,1.096092,service pipe,F5,C2,109.34,True,0.5311981337181337,service
+17,forks-3,consumers-3,60.1,DN-30,52.6,1,15872.410000000002,0.49822900000000003,service pipe,F3,C3,43.57,True,0.837799030418251,service
+18,forks-7,consumers-4,46.7,DN-30,52.6,1,12333.470000000001,0.38714300000000007,service pipe,F7,C4,20.2,True,0.3913905513307985,service

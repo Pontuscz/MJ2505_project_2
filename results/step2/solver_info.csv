@@ -1,0 +1,8 @@
+,value
+solver,cbc
+termination,optimal
+MIP gap,0.0
+variables,859
+binary variables,275
+constraints,1224
+solve time [s],13.35

@@ -1,0 +1,31 @@
+key,name,lat,lon,step,note,dhnx_id,kind,technology,fork,building_type,profile,P_heat_max_kW
+F0,Dalagatan / Vanadisvägen,59.3455268,18.041813,1,intersection,forks-0,fork,,,,,
+F1,Dalagatan / Frejgatan,59.3438624,18.04345,1,intersection,forks-1,fork,,,,,
+F2,Dalagatan / Karlbergsvägen,59.3428348,18.0444744,1,intersection,forks-2,fork,,,,,
+F3,Dalagatan / Odengatan,59.3415744,18.0457282,1,intersection,forks-3,fork,,,,,
+F4,Dalagatan / Eastmansvägen,59.3402003,18.0471227,1,intersection,forks-4,fork,,,,,
+F5,Sabbatsberg campus junction,59.3388,18.0457,1,ASSUMED point on campus road,forks-5,fork,,,,,
+F6,Västmannagatan / Vanadisvägen,59.345816,18.0435765,1,intersection,forks-6,fork,,,,,
+F7,Västmannagatan / Frejgatan,59.3442888,18.0450918,1,intersection,forks-7,fork,,,,,
+F8,Västmannagatan / Karlbergsv.,59.3429315,18.0467083,1,intersection,forks-8,fork,,,,,
+F9,Västmannagatan / Odengatan,59.3419718,18.0474077,1,intersection,forks-9,fork,,,,,
+F10,Upplandsgatan / Vanadisvägen,59.3463133,18.0448727,2,intersection,forks-10,fork,,,,,
+F11,Upplandsgatan / Frejgatan,59.3446532,18.0465316,2,intersection,forks-11,fork,,,,,
+F12,Upplandsgatan / Karlbergsv.,59.3429924,18.0481684,2,intersection,forks-12,fork,,,,,
+F13,Upplandsgatan / Odengatan,59.3423593,18.0488058,2,intersection,forks-13,fork,,,,,
+F14,Norrtullsgatan / Vanadisvägen,59.3467594,18.0471675,2,intersection,forks-14,fork,,,,,
+P0,Odenplan commuter rail station,59.345314,18.041794,1,Real station; heat recovery from ventilation air is assumed,producers-0,producer,Heat pump (station exhaust air),F0,,,
+P1,Sabbatsberg boiler house,59.3386,18.045,1,ASSUMED site; truck access for pellets from Dalagatan,producers-1,producer,Biomass (wood pellet) boiler,F5,,,
+P2,Odenplan station plant,59.3452,18.04205,2,ASSUMED; shares building and grid connection with P0,producers-2,producer,Electric boiler,F0,,,
+P3,Odengatan 69 boiler room,59.3429008,18.051809,2,ASSUMED room at real address; inner-city gas grid carries biogas,producers-3,producer,Biogas boiler,F13,,,
+P4,"Hemköp, Karlbergsvägen 24",59.3431098,18.0459542,2,Real supermarket; heat recovery is assumed,producers-4,producer,Heat pump (supermarket refrigeration heat),F8,,,
+C0,"Vasa Real, Karlbergsvägen 15",59.3425549,18.0443048,1,,consumers-0,consumer,,F2,School,Load 6,103.2
+C1,"ibis Styles Odenplan, Västmannagatan 61",59.3423708,18.0467669,1,,consumers-1,consumer,,F9,Hotel,Load 5,72.84
+C2,"Sabbatsbergs sjukhus, Olivecronas väg 1",59.3386375,18.0477811,1,,consumers-2,consumer,,F5,Hospital building (24/7),Load 3,109.34
+C3,Dalagatan 46,59.3411932,18.0464805,1,,consumers-3,consumer,,F3,Residential block,Load 4,43.57
+C4,Västmannagatan 79,59.3445962,18.0445306,1,,consumers-4,consumer,,F7,Residential block (small),Load 2,20.2
+C5,"Sabbatsbergsbyn care home, Eastmansvägen 29",59.3387592,18.0436931,2,,consumers-5,consumer,,F5,Care home (24/7),Load 11,84.84
+C6,"Matteusskolan, Vanadisvägen 16",59.347648,18.0478808,2,,consumers-6,consumer,,F14,School (large),Load 18,183.17
+C7,Odengatan 75,59.3424364,18.0497598,2,,consumers-7,consumer,,F13,Residential block,Load 10,51.57
+C8,Frejgatan 34,59.3450953,18.0476597,2,,consumers-8,consumer,,F11,Residential block,Load 16,59.57
+C9,Upplandsgatan 82,59.3462121,18.0457273,2,,consumers-9,consumer,,F10,Residential block,Load 22,67.57

@@ -1,0 +1,18 @@
+key,name,lat,lon,step,note,dhnx_id,kind,technology,fork,building_type,profile,P_heat_max_kW
+F0,Dalagatan / Vanadisvägen,59.3455268,18.041813,1,intersection,forks-0,fork,,,,,
+F1,Dalagatan / Frejgatan,59.3438624,18.04345,1,intersection,forks-1,fork,,,,,
+F2,Dalagatan / Karlbergsvägen,59.3428348,18.0444744,1,intersection,forks-2,fork,,,,,
+F3,Dalagatan / Odengatan,59.3415744,18.0457282,1,intersection,forks-3,fork,,,,,
+F4,Dalagatan / Eastmansvägen,59.3402003,18.0471227,1,intersection,forks-4,fork,,,,,
+F5,Sabbatsberg campus junction,59.3388,18.0457,1,ASSUMED point on campus road,forks-5,fork,,,,,
+F6,Västmannagatan / Vanadisvägen,59.345816,18.0435765,1,intersection,forks-6,fork,,,,,
+F7,Västmannagatan / Frejgatan,59.3442888,18.0450918,1,intersection,forks-7,fork,,,,,
+F8,Västmannagatan / Karlbergsv.,59.3429315,18.0467083,1,intersection,forks-8,fork,,,,,
+F9,Västmannagatan / Odengatan,59.3419718,18.0474077,1,intersection,forks-9,fork,,,,,
+P0,Odenplan commuter rail station,59.345314,18.041794,1,Real station; heat recovery from ventilation air is assumed,producers-0,producer,Heat pump (station exhaust air),F0,,,
+P1,Sabbatsberg boiler house,59.3386,18.045,1,ASSUMED site; truck access for pellets from Dalagatan,producers-1,producer,Biomass (wood pellet) boiler,F5,,,
+C0,"Vasa Real, Karlbergsvägen 15",59.3425549,18.0443048,1,,consumers-0,consumer,,F2,School,Load 6,103.2
+C1,"ibis Styles Odenplan, Västmannagatan 61",59.3423708,18.0467669,1,,consumers-1,consumer,,F9,Hotel,Load 5,72.84
+C2,"Sabbatsbergs sjukhus, Olivecronas väg 1",59.3386375,18.0477811,1,,consumers-2,consumer,,F5,Hospital building (24/7),Load 3,109.34
+C3,Dalagatan 46,59.3411932,18.0464805,1,,consumers-3,consumer,,F3,Residential block,Load 4,43.57
+C4,Västmannagatan 79,59.3445962,18.0445306,1,,consumers-4,consumer,,F7,Residential block (small),Load 2,20.2

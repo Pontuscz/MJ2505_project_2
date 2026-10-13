@@ -1,0 +1,6 @@
+id,technology,input,efficiency_or_COP,capex_EUR_per_MW,var_OM_EUR_per_MWh,lifetime_years,source
+P0,Heat pump 1 (station exhaust air),electricity,3.10,1130000,3.07,25,Danish Energy Agency technology data (transcribed from Elisabeth's table)
+P1,Biomass boiler,wood pellets,1.01,750000,2.08,25,Danish Energy Agency technology data
+P2,Electric boiler (small),electricity,0.99,150000,0.95,20,Danish Energy Agency technology data
+P3,Biogas boiler,biogas/methane,1.03,60000,1.17,25,Danish Energy Agency technology data (natural gas boiler)
+P4,Heat pump 2 (supermarket refrigeration heat),electricity,3.10,1130000,3.07,25,Danish Energy Agency technology data

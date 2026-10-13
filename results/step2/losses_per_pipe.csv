@@ -1,0 +1,28 @@
+street,from_key,to_key,hp_type,length,losses
+Dalagatan,F3,F4,DN-25,172.0,1.30032
+Sabbatsberg campus road,F4,F5,DN-25,175.4,1.326024
+Västmannagatan,F6,F7,DN-25,190.3,1.438668
+Västmannagatan,F7,F8,DN-30,176.6,1.4640140000000001
+Västmannagatan,F8,F9,DN-40,113.8,1.08679
+Vanadisvägen,F0,F6,DN-60,105.0,1.0941
+Karlbergsvägen,F2,F8,DN-40,127.1,1.2138049999999998
+Odengatan,F3,F9,DN-25,105.0,0.7938
+Vanadisvägen,F6,F10,DN-60,92.0,0.95864
+Vanadisvägen,F10,F14,DN-50,139.2,1.2778559999999999
+Frejgatan,F7,F11,DN-40,91.1,0.8700049999999999
+Odengatan,F9,F13,DN-25,90.2,0.681912
+producer connection,P0,F0,DN-60,23.7,0.246954
+producer connection,P1,F5,DN-50,45.5,0.41769
+producer connection,P2,F0,DN-25,38.7,0.292572
+producer connection,P3,F13,DN-30,180.6,1.497174
+producer connection,P4,F8,DN-60,47.1,0.49078200000000005
+service pipe,F2,C0,DN-40,32.6,0.31133
+service pipe,F9,C1,DN-40,57.3,0.5472149999999999
+service pipe,F5,C2,DN-40,119.4,1.14027
+service pipe,F3,C3,DN-30,60.1,0.49822900000000003
+service pipe,F7,C4,DN-25,46.7,0.35305200000000003
+service pipe,F5,C5,DN-40,113.9,1.087745
+service pipe,F14,C6,DN-50,106.8,0.9804240000000001
+service pipe,F13,C7,DN-30,54.8,0.45429200000000003
+service pipe,F11,C8,DN-40,80.7,0.770685
+service pipe,F10,C9,DN-40,49.7,0.474635

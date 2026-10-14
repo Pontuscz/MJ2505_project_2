@@ -635,7 +635,7 @@ def build_and_solve_heat_system(data, tech, carriers, demand_col="heat demand",
 
     Decision variables : installed capacity of each unit [MW] (solph.Investment)
                          hourly heat output of each unit [MW]
-    Objective          : sum annualised capex (epc) + fuel + var O&M (+ CO2) [EUR/yr]
+    Objective          : sum annualised capex + fuel + var O&M (+ CO2) [EUR/yr]
     Constraints        : hourly heat balance on 'heat network' bus,
                          output <= capacity (solar: <= capacity * solar_cf),
                          capacity <= max_capacity_MW, input = output / efficiency
@@ -689,72 +689,50 @@ def build_and_solve_heat_system(data, tech, carriers, demand_col="heat demand",
                                             fix=data[demand_col] / data[demand_col].max())})
     district_heating_system.add(heat_sink)
 
-    # Unit 1: biomass boiler
-    biomass_boiler = Converter(
-        label="biomass boiler",
-        inputs={biomass_bus: Flow()},
-        outputs={heat_bus: Flow(nominal_capacity=Investment(ep_costs=ep_costs("biomass boiler"),
-                                                            maximum=max_cap("biomass boiler")),
-                                variable_costs=var_cost("biomass boiler"))},
-        conversion_factors={heat_bus: tech.loc["biomass boiler", "efficiency"]})
+    # Build one component for every technology row (supports multiple heat pumps).
+    unit_parts = {}
+    carrier_buses = {"gas": gas_bus, "biomass": biomass_bus, "electricity": electricity_bus}
+    for unit, t in tech.iterrows():
+        output = Flow(nominal_capacity=Investment(
+            ep_costs=ep_costs(unit), maximum=max_cap(unit)),
+            variable_costs=var_cost(unit))
+        kind = t.get("technology_type", "")
+        if t["input"] == "solar":
+            output.max = data["solar_cf"]
+            comp = Source(label=unit, outputs={heat_bus: output})
+            in_bus, price = None, pd.Series(0.0, index=data.index)
+        else:
+            in_bus = carrier_buses[t["input"]]
+            price = (data["gas price"] if t["input"] == "gas" else
+                     data["el_spot_price"] if t["input"] == "electricity" else
+                     pd.Series(carriers.loc[t["input"], "price_eur_per_MWh"], index=data.index))
+            if kind == "heat_pump" or (t["input"] == "electricity" and t["efficiency"] > 1):
+                cop = float(t["efficiency"])
+                if cop <= 1:
+                    raise ValueError(f"{unit}: heat-pump COP must exceed 1")
+                # Independent source buses keep the station and supermarket separate.
+                source_bus = Bus(label=f"{unit} heat source bus")
+                source = Source(label=f"{unit} heat source", outputs={source_bus: Flow()})
+                district_heating_system.add(source_bus, source)
+                comp = Converter(label=unit,
+                    inputs={electricity_bus: Flow(), source_bus: Flow()},
+                    outputs={heat_bus: output},
+                    conversion_factors={electricity_bus: 1 / cop,
+                                        source_bus: (cop - 1) / cop, heat_bus: 1})
+            else:
+                comp = Converter(label=unit, inputs={in_bus: Flow()},
+                    outputs={heat_bus: output},
+                    conversion_factors={heat_bus: float(t["efficiency"])})
+        district_heating_system.add(comp)
+        unit_parts[unit] = (comp, in_bus, price)
 
-    # Unit 2: gas boiler
-    gas_boiler = Converter(
-        label="gas boiler",
-        inputs={gas_bus: Flow()},
-        outputs={heat_bus: Flow(nominal_capacity=Investment(ep_costs=ep_costs("gas boiler"),
-                                                            maximum=max_cap("gas boiler")),
-                                variable_costs=var_cost("gas boiler"))},
-        conversion_factors={heat_bus: tech.loc["gas boiler", "efficiency"]})
-
-    # Unit 3: heat pump (electricity + free waste heat -> heat), as in the tutorial
-    cop = tech.loc["heat pump", "efficiency"]
-    heat_pump = Converter(
-        label="heat pump",
-        inputs={electricity_bus: Flow(), waste_heat_bus: Flow()},
-        outputs={heat_bus: Flow(nominal_capacity=Investment(ep_costs=ep_costs("heat pump"),
-                                                            maximum=max_cap("heat pump")),
-                                variable_costs=var_cost("heat pump"))},
-        conversion_factors={electricity_bus: 1 / cop, waste_heat_bus: (cop - 1) / cop})
-
-    # Unit 4: electric boiler
-    electric_boiler = Converter(
-        label="electric boiler",
-        inputs={electricity_bus: Flow()},
-        outputs={heat_bus: Flow(nominal_capacity=Investment(ep_costs=ep_costs("electric boiler"),
-                                                            maximum=max_cap("electric boiler")),
-                                variable_costs=var_cost("electric boiler"))},
-        conversion_factors={heat_bus: tech.loc["electric boiler", "efficiency"]})
-
-    # Unit 5: solar thermal collector (output <= capacity * hourly capacity factor)
-    solar_thermal = Source(
-        label="solar thermal",
-        outputs={heat_bus: Flow(nominal_capacity=Investment(ep_costs=ep_costs("solar thermal"),
-                                                            maximum=max_cap("solar thermal")),
-                                max=data["solar_cf"],
-                                variable_costs=var_cost("solar thermal"))})
-
-    district_heating_system.add(biomass_boiler, gas_boiler, heat_pump, electric_boiler, solar_thermal)
-
-    # Build and solve
     model = Model(district_heating_system)
     model.solve(solver=SOLVER, solve_kwargs={"tee": False}, cmdline_options=SOLVER_OPTIONS)
     results = processing.results(model)
-
-    parts = dict(
-        heat_bus=heat_bus, heat_sink=heat_sink,
-        units={  # label: (component, input bus or None, fuel price series [EUR/MWh_input])
-            "biomass boiler": (biomass_boiler, biomass_bus,
-                               pd.Series(carriers.loc["biomass", "price_eur_per_MWh"], index=data.index)),
-            "gas boiler": (gas_boiler, gas_bus, data["gas price"]),
-            "heat pump": (heat_pump, electricity_bus, data["el_spot_price"]),
-            "electric boiler": (electric_boiler, electricity_bus, data["el_spot_price"]),
-            "solar thermal": (solar_thermal, None, pd.Series(0.0, index=data.index)),
-        },
+    parts = dict(heat_bus=heat_bus, heat_sink=heat_sink, units=unit_parts,
         index=data.index,
         settings=dict(co2_price=co2_price, include_fuel_costs=include_fuel_costs,
-                      include_var_om=include_var_om, i=i),
-    )
+                      include_var_om=include_var_om, i=i))
     return model, results, parts
 
 
@@ -806,7 +784,8 @@ def heat_dispatch(results, parts):
 
 
 UNIT_COLORS = {"biomass boiler": "#2E7D32", "gas boiler": "#EC6707", "heat pump": "#B54036",
-               "electric boiler": "#1E88E5", "solar thermal": "#FBC02D"}
+               "electric boiler": "#1E88E5", "solar thermal": "#FBC02D",
+               "heat pump station": "#B54036", "heat pump supermarket": "#8E44AD"}
 
 
 def plot_dispatch(dispatch, title):

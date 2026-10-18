@@ -1,0 +1,4 @@
+carrier,ef_tCO2_per_MWh_input,biogenic,source
+electricity,0.02,False,"Uniper, El och klimat: Swedish production mix ~20 g CO2/kWh"
+biomass,0.4032,True,"IPCC 2006 Vol.2 Ch.2 Table 2.2, Wood/Wood Waste 112,000 kg/TJ"
+gas,0.19656,True,"IPCC 2006 Vol.2 Ch.2 Table 2.2, Other Biogas 54,600 kg/TJ (biomethane)"
